@@ -85,16 +85,20 @@ pipeline {
         }
 
         stage('Build App Image') {
-            steps {
-                dockImage = docker.build registry + ":V$BUILD_NUMBER"
-            }
+           steps{
+                script {
+                    dockImage = docker.build registry + ":V$BUILD_NUMBER"
+                }
+           }
         }
 
         stage('Upload Image') {
             steps {
-                docker.withRegistry('', registryCredential) {
-                    dockImage.push("V$BUILD_NUMBER")
-                    dockImage.push("latest")
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push("V$BUILD_NUMBER")
+                        dockerImage.push("latest")
+                    }
                 }
             }
         }
